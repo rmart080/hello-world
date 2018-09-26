@@ -1,0 +1,13 @@
+G:\Jonathan\Fall2018\AdvWindowsPro\C# Files\HW3\git\masterupdated\Assignment_3.Main\bin\Debug\Assignment_3.Main.exe.config
+G:\Jonathan\Fall2018\AdvWindowsPro\C# Files\HW3\git\masterupdated\Assignment_3.Main\bin\Debug\Assignment_3.Main.exe
+G:\Jonathan\Fall2018\AdvWindowsPro\C# Files\HW3\git\masterupdated\Assignment_3.Main\bin\Debug\Assignment_3.Main.pdb
+G:\Jonathan\Fall2018\AdvWindowsPro\C# Files\HW3\git\masterupdated\Assignment_3.Main\bin\Debug\Assignment_3.dll
+G:\Jonathan\Fall2018\AdvWindowsPro\C# Files\HW3\git\masterupdated\Assignment_3.Main\bin\Debug\Assignment_3.pdb
+G:\Jonathan\Fall2018\AdvWindowsPro\C# Files\HW3\git\masterupdated\Assignment_3.Main\obj\Debug\Assignment_3.Main.csprojAssemblyReference.cache
+G:\Jonathan\Fall2018\AdvWindowsPro\C# Files\HW3\git\masterupdated\Assignment_3.Main\obj\Debug\Assignment_3.Main.PreferencesDialogue.resources
+G:\Jonathan\Fall2018\AdvWindowsPro\C# Files\HW3\git\masterupdated\Assignment_3.Main\obj\Debug\Assignment_3.Main.Properties.Resources.resources
+G:\Jonathan\Fall2018\AdvWindowsPro\C# Files\HW3\git\masterupdated\Assignment_3.Main\obj\Debug\Assignment_3.Main.csproj.GenerateResource.cache
+G:\Jonathan\Fall2018\AdvWindowsPro\C# Files\HW3\git\masterupdated\Assignment_3.Main\obj\Debug\Assignment_3.Main.csproj.CoreCompileInputs.cache
+G:\Jonathan\Fall2018\AdvWindowsPro\C# Files\HW3\git\masterupdated\Assignment_3.Main\obj\Debug\Assignment_3.Main.csproj.CopyComplete
+G:\Jonathan\Fall2018\AdvWindowsPro\C# Files\HW3\git\masterupdated\Assignment_3.Main\obj\Debug\Assignment_3.Main.exe
+G:\Jonathan\Fall2018\AdvWindowsPro\C# Files\HW3\git\masterupdated\Assignment_3.Main\obj\Debug\Assignment_3.Main.pdb
