@@ -106,7 +106,7 @@ namespace Assignment_4
         //create children
         private void newFormToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            newForm mdiChildForm = new newForm();
+            BaseForm mdiChildForm = new BaseForm();
             mdiChildForm.MdiParent = this;
             mdiChildForm.Show();
 
@@ -128,7 +128,7 @@ namespace Assignment_4
         //create a new child form
         private void newFormToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            newForm mdiChildForm = new newForm();
+            BaseForm mdiChildForm = new BaseForm();
             mdiChildForm.MdiParent = this;
             mdiChildForm.Show();
         }
