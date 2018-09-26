@@ -16,7 +16,19 @@ namespace Assignment_4.Main
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainForm());
+            LoginForm logIn = new LoginForm();
+            if (!Properties.Settings.Default.loginCheckbox)
+            {
+                Application.Run(logIn);
+                if (logIn.result == DialogResult.Yes)
+                {
+                    Application.Run(new MainForm());
+                }
+            }
+            else
+            {
+                Application.Run(new MainForm());
+            }
         }
     }
 }

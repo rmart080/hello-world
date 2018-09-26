@@ -12,6 +12,9 @@ namespace Assignment_4
 {
     public partial class BaseForm : Form
     {
+
+        public event EventHandler colorChanged;
+
         public BaseForm()
         {
             InitializeComponent();
@@ -22,50 +25,13 @@ namespace Assignment_4
             this.Close();
         }
 
-        //change color of children forms
         private void colorsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            foreach (Form childForm in this.MdiChildren)
+            ColorDialog colorDialog = new ColorDialog();
+
+            if(colorDialog.ShowDialog() == DialogResult.OK)
             {
-                if (childForm.Focus())
-                {
-                    ColorDialog colorDialog = new ColorDialog();
-
-                    if (colorDialog.ShowDialog() == DialogResult.OK)
-                    {
-                        childForm.BackColor = colorDialog.Color;
-                    }
-                }
-            }
-        }
-
-        //change color of children form
-        private void colorsToolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-            foreach (Form childForm in this.MdiChildren)
-            {
-                if (childForm.Focus())
-                {
-
-                    ColorDialog colorDialog = new ColorDialog();
-
-                    if (colorDialog.ShowDialog() == DialogResult.OK)
-                    {
-                        childForm.BackColor = colorDialog.Color;
-                    }
-                }
-                else
-                {
-
-                }
-            }
-        }
-        //close children
-        private void closeChildToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            foreach(Form childForm in this.MdiChildren)
-            {
-                childForm.Dispose();
+                this.BackColor = colorDialog.Color;
             }
         }
 
@@ -103,34 +69,9 @@ namespace Assignment_4
             downPoint = Point.Empty;
         }
 
-        //create children
-        private void newFormToolStripMenuItem_Click(object sender, EventArgs e)
+        private void backColor_Changed(object sender, EventArgs e)
         {
-            newForm mdiChildForm = new newForm();
-            mdiChildForm.MdiParent = this;
-            mdiChildForm.Show();
-
-
-        }
-        //close children
-        private void closeChildToolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-            foreach (Form childForm in this.MdiChildren)
-            {
-                childForm.Dispose();
-            }
-        }
-        //close parent form
-        private void closeToolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
-        //create a new child form
-        private void newFormToolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-            newForm mdiChildForm = new newForm();
-            mdiChildForm.MdiParent = this;
-            mdiChildForm.Show();
+                this.colorChanged?.Invoke(this, e);
         }
     }
 }

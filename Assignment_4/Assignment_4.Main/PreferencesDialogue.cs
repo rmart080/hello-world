@@ -7,18 +7,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Assignment_4.Main;
 using Assignment_4;
 
 namespace Assignment_4.Main
 {
-    public partial class PreferencesDialogue : DialogForm, IPreferences
+    public partial class PreferencesDialogue : DialogForm
     {
         //Ranges are subject to change
         const int MIN_WIDTH = 50;
         const int MIN_HEIGHT = 50;
-        const int MAX_WIDTH = 1920;
-        const int MAX_HEIGHT = 1080;
         const float MIN_RATIO = 0.1f;
         const float MAX_RATIO = 5;
 
@@ -82,58 +79,40 @@ namespace Assignment_4.Main
             }
         }
 
+
         /// <summary>
         /// Gets fired upon the user clicking the Okay Button or Apply Button
         /// </summary>
         public event EventHandler Apply;
 
+        public event EventHandler closing;
+
+
+        private bool isValidWidth;
+        private bool isValidHeight;
+        private bool isValidElipseRatio;
+        private bool isValidRectangleRatio;
+        private bool okButton_Clicked = false;
 
         public PreferencesDialogue()
         {
             InitializeComponent();
         }
 
-        private void preferencesDialogue_Load(object sender, EventArgs e)
-        {
-            if (this.Modal)
-                this.applyButton.Enabled = false;
-
-            toolTip.SetToolTip(this.elipseWidthText, $"Sets the width for Eplipse Children. Must be a whole number or decimal between {MIN_WIDTH} and {MAX_WIDTH}");
-            helpProvider.SetHelpString(this.elipseWidthText, $"Sets the width for Eplipse Children. Must be a whole number or decimal between {MIN_WIDTH} and {MAX_WIDTH}");
-
-            toolTip.SetToolTip(this.elipseRatioText, $"Sets the width*height ratio for Eplipse Children. Must be a whole number or decimal between {MIN_RATIO} and {MAX_RATIO}");
-            helpProvider.SetHelpString(this.elipseRatioText, $"Sets the width*height ratio for Eplipse Children. Must be a whole number or decimal between {MIN_RATIO} and {MAX_RATIO}");
-
-
-            toolTip.SetToolTip(this.rectangularHeightText, $"Sets the height for Rectangular Children. Must be a whole number or decimal between {MIN_WIDTH} and {MAX_WIDTH}");
-            helpProvider.SetHelpString(this.rectangularHeightText, $"Sets the height for Rectangular Children. Must be a whole number or decimal between {MIN_WIDTH} and {MAX_WIDTH}");
-
-            toolTip.SetToolTip(this.rectangleRatioText, $"Sets the width*height ratio for Rectangular Children. Must be a whole number or decimal between {MIN_RATIO} and {MAX_RATIO}");
-            helpProvider.SetHelpString(this.rectangleRatioText, $"Sets the width*height ratio for Rectangular Children. Must be a whole number or decimal between {MIN_RATIO} and {MAX_RATIO}");
-
-        }
-
-        private void preferencesDialogue_KeyPress(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Escape)
-            {
-                this.Close();
-            }
-        }
-
         private void okayButton_Click(object sender, EventArgs e)
         {
             if (isFormValid())
-            {
                 this.Apply?.Invoke(this, e);
+                this.okButton_Clicked = true;
                 this.Close();
-            }
         }
 
         private void applyButton_Click(object sender, EventArgs e)
         {
             if (isFormValid())
+            {
                 this.Apply?.Invoke(this, e);
+            }
         }
 
         private void cancelButton_Click(object sender, EventArgs e)
@@ -144,10 +123,10 @@ namespace Assignment_4.Main
         private void elipseWidthText_Validating(object sender, CancelEventArgs e)
         {
             string text = this.elipseWidthText.Text;
-            string error = $"Invalid number. Must be a whole number or decimal between {MIN_WIDTH} and {MAX_WIDTH}";
+            string error = $"Invalid number. Must be a whole number or decimal greater than {MIN_HEIGHT}";
 
             // Validate the data entered into the textbox
-            if (!int.TryParse(text, out var result) || result < MIN_WIDTH || result > MAX_WIDTH)
+            if (!int.TryParse(text, out var result) || result < MIN_WIDTH)
             {
                 e.Cancel = true;
                 this.errorProvider.SetError(this.elipseWidthText, error);
@@ -155,16 +134,18 @@ namespace Assignment_4.Main
             }
 
             //If we made it this far it means validation passed
+            isValidWidth = true;
             this.errorProvider.SetError(this.elipseWidthText, "");
         }
 
         private void rectangularHeightText_Validating(object sender, CancelEventArgs e)
         {
             string text = this.rectangularHeightText.Text;
-            string error = $"Invalid number. Must be a whole number or decimal between {MIN_HEIGHT} and {MAX_HEIGHT}";
+            string error = $"Invalid number. Must be a whole number or decimal greater than {MIN_HEIGHT}";
+            isValidHeight = false;
 
             // Validate the data entered into the textbox
-            if (!int.TryParse(text, out var result) || result < MIN_WIDTH || result > MAX_HEIGHT)
+            if (!int.TryParse(text, out var result) || result < MIN_WIDTH)
             {
                 e.Cancel = true;
                 this.errorProvider.SetError(this.rectangularHeightText, error);
@@ -172,13 +153,20 @@ namespace Assignment_4.Main
             }
 
             //If we made it this far it means validation passed
+            isValidHeight = true;
             this.errorProvider.SetError(this.rectangularHeightText, "");
+        }
+
+        private bool isFormValid()
+        {
+            return isValidHeight && isValidWidth && isValidElipseRatio && isValidRectangleRatio;
         }
 
         private void elipseRatioText_Validating(object sender, CancelEventArgs e)
         {
             string text = this.elipseRatioText.Text;
             string error = $"Invalid number. Must be a whole number or decimal between than {MIN_RATIO} and {MAX_RATIO}";
+            isValidElipseRatio = false;
 
             // Validate the data entered into the textbox
             if (!float.TryParse(text, out var result) || !(result >= MIN_RATIO && result <= MAX_RATIO))
@@ -189,6 +177,7 @@ namespace Assignment_4.Main
             }
 
             //If we made it this far it means validation passed
+            isValidElipseRatio = true;
             this.errorProvider.SetError(this.elipseRatioText, "");
         }
 
@@ -196,6 +185,7 @@ namespace Assignment_4.Main
         {
             string text = this.rectangleRatioText.Text;
             string error = $"Invalid number. Must be a whole number or decimal between than {MIN_RATIO} and {MAX_RATIO}";
+            isValidRectangleRatio = false;
 
             // Validate the data entered into the textbox
             if (!float.TryParse(text, out var result) || !(result >= MIN_RATIO && result <= MAX_RATIO))
@@ -206,12 +196,31 @@ namespace Assignment_4.Main
             }
 
             //If we made it this far it means validation passed
+            isValidRectangleRatio = true;
             this.errorProvider.SetError(this.rectangleRatioText, "");
         }
 
-        private bool isFormValid()
+        private void revert_info(object sender, FormClosingEventArgs e)
         {
-            return this.ValidateChildren();
+            if(this.okButton_Clicked == false) {
+                this.closing?.Invoke(this, e);
+            }
+        }
+
+        private void key_press(object sender, KeyEventArgs e)
+        {
+            if(e.KeyCode == Keys.Escape)
+            {
+                this.Close();
+            }
+        }
+
+        private void hideApply_Button(object sender, EventArgs e)
+        {
+            if (this.Modal == true)
+            {
+                this.applyButton.Enabled = false;
+            }
         }
     }
 }

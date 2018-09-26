@@ -67,5 +67,16 @@ namespace Assignment_4.Main.Properties
                 resourceCulture = value;
             }
         }
+		
+		
+		/// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Team1PinkPonies {
+            get {
+                object obj = ResourceManager.GetObject("Team1PinkPonies", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }

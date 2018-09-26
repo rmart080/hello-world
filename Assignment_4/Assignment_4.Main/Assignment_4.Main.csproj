@@ -45,12 +45,30 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IPreferences.cs" />
+    <Compile Include="AboutDialogue.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AboutDialogue.designer.cs">
+      <DependentUpon>AboutDialogue.cs</DependentUpon>
+    </Compile>
+    <Compile Include="InfoModeless_Interface.cs" />
+    <Compile Include="LoginForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LoginForm.Designer.cs">
+      <DependentUpon>LoginForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OathDialogue.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OathDialogue.designer.cs">
+      <DependentUpon>OathDialogue.cs</DependentUpon>
     </Compile>
     <Compile Include="PreferencesDialogue.cs">
       <SubType>Form</SubType>
@@ -60,8 +78,15 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="AboutDialogue.resx">
+      <DependentUpon>AboutDialogue.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LoginForm.resx" />
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OathDialogue.resx">
+      <DependentUpon>OathDialogue.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PreferencesDialogue.resx">
       <DependentUpon>PreferencesDialogue.cs</DependentUpon>

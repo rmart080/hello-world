@@ -41,6 +41,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CustomChild.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CustomChild.designer.cs">
+      <DependentUpon>CustomChild.cs</DependentUpon>
+    </Compile>
     <Compile Include="DialogForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -65,6 +71,12 @@
     <Compile Include="BaseForm.designer.cs">
       <DependentUpon>BaseForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="OathUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OathUserControl.designer.cs">
+      <DependentUpon>OathUserControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RectangularChild.cs">
       <SubType>Form</SubType>
@@ -81,6 +93,9 @@
     <Service Include="{94E38DFF-614B-4cbd-B67C-F211BB35CE8B}" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="CustomChild.resx">
+      <DependentUpon>CustomChild.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="DialogForm.resx">
       <DependentUpon>DialogForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -89,6 +104,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="BaseForm.resx">
       <DependentUpon>BaseForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OathUserControl.resx">
+      <DependentUpon>OathUserControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="RectangularChild.resx">
       <DependentUpon>RectangularChild.cs</DependentUpon>

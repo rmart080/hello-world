@@ -12,12 +12,21 @@ namespace Assignment_4.Main
 {
     public partial class MainForm : Form
     {
-        //Defining default values 
-        private int ellipseWidth = 50; //Variable for Storing the Ellipse Width of the Preferences Dialog
+        private int defaultEllipseWidth = 100; 
+        private float defaultEllipseRatio = 1; 
+        private int defaultRectangleHeight = 100;  //Dafault values for reverting back 
+        private float defaultRectangleRatio = 1; 
+
+
+
+        private int ellipseWidth = 100; //Variable for Storing the Ellipse Width of the Preferences Dialog
         private float ellipseRatio = 1; //Variable for Storing the Ratio of the Preferences Dialog
-        private int rectangleHeight = 50;  //Variable for Storing the Rectangle Height of the Preferences Dialog
+        private int rectangleHeight = 100;  //Variable for Storing the Rectangle Height of the Preferences Dialog
         private float rectangleRatio = 1; //Variable for Storing the Rectangle Ratio of the Preferences Dialog
-        private PreferencesDialogue modelessDlg;
+       
+
+
+
 
         //Properties for the variables declared above.
         int eWidth
@@ -44,57 +53,82 @@ namespace Assignment_4.Main
             set { rectangleRatio = value; }
         }
 
+        public bool check
+        {
+            get { return Properties.Settings.Default.loginCheckbox; }
+            set { Properties.Settings.Default.loginCheckbox = value; }
+        }
+
 
         public MainForm()
         {
             InitializeComponent();
         }
 
+
         private void openModallyToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
-            using (var prefdlg = createPrefDialogue())
+            using (PreferencesDialogue prefdlg = new PreferencesDialogue())
             {
                 prefdlg.ShowDialog();
-                this.Update();      //Check if this is the correct code for updating the properties of the Form.
 
-                Console.WriteLine(eWidth);
-                Console.WriteLine(eRatio);
-                Console.WriteLine(recHeight);
-                Console.WriteLine(recRatio);
+                this.eWidth = prefdlg.ElipseWidth;
+                this.eRatio = prefdlg.ElipseRatio;
+                this.recHeight = prefdlg.RectangularHeight;
+                this.recRatio = prefdlg.RectangleRatio;
+
             }
         }
 
         private void openModelesslyToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (modelessDlg == null || modelessDlg.IsDisposed)
-            {
-                modelessDlg = createPrefDialogue();  //Change this when you have the Preferences Dialog working, this is just a test to see if it works.
-                this.Update();      //Check if this is the correct code for updating the properties of the Form.
-                modelessDlg.Show(this);
-            }
-            else
-                modelessDlg.Activate();
+            PreferencesDialogue prefdlg = new PreferencesDialogue();
+            prefdlg.Apply += new EventHandler(infoGrab_Apply);
+            prefdlg.closing += new EventHandler(revert_Info);
+            prefdlg.Show(this);
+
+        }
+
+        private void revert_Info(object sender, EventArgs e) //Reverting info to default values
+        {
+            PreferencesDialogue prefdlg = sender as PreferencesDialogue;
+            this.eWidth = this.defaultEllipseWidth;
+            this.eRatio = this.defaultEllipseRatio;
+            this.recHeight = this.defaultRectangleHeight;
+            this.recRatio = this.defaultRectangleRatio;
+
         }
 
         void infoGrab_Apply(object sender, EventArgs e)     //Grabbing All info inputted in the Preferences Dialog
         {
-            IPreferences prefdlg = sender as IPreferences; //bad practice
+            PreferencesDialogue prefdlg = sender as PreferencesDialogue;
             this.eWidth = prefdlg.ElipseWidth;
             this.eRatio = prefdlg.ElipseRatio;
             this.recHeight = prefdlg.RectangularHeight;
-            this.recRatio = prefdlg.RectangleRatio;
+            this.recRatio = prefdlg.RectangleRatio; 
+            //Change for getting the values of the Custom Child 
+        }
+
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+
         }
 
         private void openEllipticChildToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ElipForm ellipseChild = new ElipForm(eRatio, eWidth);
+            ellipseChild.Owner = this;              //Making Ellipse form Owned
+            ellipseChild.MdiParent = this;          //Making Ellipse form an MdiChild
             ellipseChild.Show();
+
         }
 
         private void openRectangularChildToolStripMenuItem_Click(object sender, EventArgs e)
         {
             RectangularChild rectangleChild = new RectangularChild(recHeight, recRatio); //Creating new Rectangular Child
+            rectangleChild.Owner = this;            //Making Rectangle form owned
+            rectangleChild.MdiParent = this;
             rectangleChild.Show();  //Displaying the Rectangular Child
         }
 
@@ -108,7 +142,9 @@ namespace Assignment_4.Main
             foreach (Form f in openForms)           //Checking if the form is an EllipseChild and close it
             {
                 if (f.Name == "ElipForm")
+                {
                     f.Close();
+                }
             }
 
         }
@@ -123,8 +159,11 @@ namespace Assignment_4.Main
             foreach (Form f in openForms)               //Checking if the form is an RectangularChild and close it
             {
                 if (f.Name == "RectangularChild")
+                {
                     f.Close();
+                }
             }
+
         }
 
         private void closeApplicationToolStripMenuItem_Click(object sender, EventArgs e)
@@ -144,50 +183,178 @@ namespace Assignment_4.Main
 
         private void preferencesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            int count;
-            for (count = MainFormContextMenu.Items.Count - 1; count > -1; count--)
+            
+        }
+
+        private void oathToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OathDialogue odlg = new OathDialogue();       //Creating new Oath Dialog and displaying it
+            odlg.StartPosition = FormStartPosition.Manual;
+            odlg.Left = this.Right + 50;
+            odlg.Top = this.Top;
+            odlg.ShowDialog();
+            
+            odlg.Owner = this;
+        }
+
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            bool isOpen = false;
+
+            foreach (Form f in Application.OpenForms)           //Checking if the form is an About Dialog 
             {
-                preferencesToolStripMenuItem.DropDownItems.Insert(0, MainFormContextMenu.Items[count]);
+                if (f.Name == "AboutDialog")
+                    isOpen = true;
+            }
+
+            if (isOpen == false) {
+                AboutDialogue adlg = new AboutDialogue();       //Creating new About Dialog and displaying it
+                adlg.StartPosition = FormStartPosition.Manual;
+                adlg.Left = this.Left;
+                adlg.Top = this.Bottom + 20;
+                adlg.ShowDialog();
+                adlg.Owner = this;
             }
         }
 
-
-        PreferencesDialogue createPrefDialogue()
+        private void fileToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //creates pref dialogue and initializes it with current (or default values)
-            PreferencesDialogue prefdlg = new PreferencesDialogue();
-            prefdlg.ElipseWidth = this.eWidth;
-            prefdlg.ElipseRatio = this.eRatio;
-            prefdlg.RectangularHeight = this.recHeight;
-            prefdlg.RectangleRatio = this.recRatio;
-            prefdlg.Apply += infoGrab_Apply;
-            prefdlg.GotFocus += Prefdlg_GotFocus;
-            prefdlg.Activated += Prefdlg_Activated;
-            return prefdlg;
+            bool recChildExists = false;
+            bool eChildExists = false;
+            bool childExists = false;
+
+            foreach (Form f in Application.OpenForms)        
+            {
+                if (f.Name == "RectangularChild")
+                {
+                    recChildExists = true;
+                    childExists = true;
+                }
+                else if (f.Name == "ElipForm")
+                {
+                    eChildExists = true;
+                    childExists = true;
+                }
+
+                else if (f.Name == "CustomChild")
+                {
+                    childExists = true;
+                }
+            }
+
+            if (eChildExists == false)
+            {
+                closeAllEllipticChildrenToolStripMenuItem.Enabled = false;
+            }
+
+            else
+                closeAllEllipticChildrenToolStripMenuItem.Enabled = true;
+
+            if (recChildExists == false)
+            {
+                closeAllRectangularChildrenToolStripMenuItem.Enabled = false;
+            }
+
+            else
+                closeAllRectangularChildrenToolStripMenuItem.Enabled = true;
+
+            if (childExists == false)
+            {
+                closeAllChildrenToolStripMenuItem.Enabled = false;
+            }
+
+            else
+                closeAllChildrenToolStripMenuItem.Enabled = true;
+
         }
 
-        private void Prefdlg_Activated(object sender, EventArgs e)
+        private void preferencesMenuItem_DropDownOpening(object sender, EventArgs e)
         {
-            if (modelessDlg != null && !modelessDlg.IsDisposed)
-                modelessDlg.Opacity = 1;
+           
+            preferencesToolStripMenuItem.DropDown = MainFormContextMenu;    //Setting Preferences Menu Items to Context Menu
+
+
         }
 
-        private void Prefdlg_GotFocus(object sender, EventArgs e)
+        private void mdiChildActivate_Click(object sender, EventArgs e)
         {
-            //Used to set opacity when Going from Main form to Prefs
-            modelessDlg.Opacity = 1;
+            BaseForm activeChild = (BaseForm)this.ActiveMdiChild;
+
+
+
+            if (activeChild != null)
+            {
+                activeChild.colorChanged += new EventHandler(changeColor);
+                if (activeChild.Name == "ElipForm")
+                {
+                    toolStripStatusLabel.Text = "Ellipse";
+                    statusStrip.BackColor = activeChild.BackColor;
+                }
+
+                if (activeChild.Name == "RectangularChild")
+                {
+                    toolStripStatusLabel.Text = "Rectangle";
+                    statusStrip.BackColor = activeChild.BackColor;
+                }
+
+                if (activeChild.Name == "CustomChild")
+                {
+                    toolStripStatusLabel.Text = "Custom";
+                    statusStrip.BackColor = activeChild.BackColor;
+                }
+            }
+
+            else
+            {
+                toolStripStatusLabel.Text = "Team 1";
+                statusStrip.BackColor = Color.White;
+            }
         }
 
-        private void MainForm_Deactivate(object sender, EventArgs e)
+        private void openCustomChildToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (modelessDlg != null && !modelessDlg.IsDisposed)
-                modelessDlg.Opacity = 0.7;
+            CustomChild customChild = new CustomChild(recRatio, recHeight); //Creating new Rectangular Child
+            customChild.Owner = this;
+            customChild.MdiParent = this;
+            customChild.Show();  //Displaying the Rectangular Child
         }
 
-        private void MainForm_Activated(object sender, EventArgs e)
+        private void closeAllChildrenToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (modelessDlg != null && !modelessDlg.IsDisposed)
-                modelessDlg.Opacity = 1;
+            List<Form> openForms = new List<Form>();        //Creating a list of all the open forms
+
+            foreach (Form f in Application.OpenForms)   //Adding all open forms to the list
+                openForms.Add(f);
+
+            foreach (Form f in openForms)               //Closing All forms that are not Main Form
+            {
+                if (f.Name != "MainForm")
+                {
+                    f.Close();
+                }
+            }
+
+        }
+
+        private void changeColor(object sender, EventArgs e)   //Method to change BackColor of Status Bar when
+        {                                                      //Color of a child changes
+            Form activeChild = this.ActiveMdiChild;
+            statusStrip.BackColor = activeChild.BackColor;
+        }
+
+        private void loginCheckboxToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (check)
+            {
+                this.loginCheckboxToolStripMenuItem.Checked = false;
+                check = false;
+            }
+            else
+            {
+                loginCheckboxToolStripMenuItem.Checked = true;
+                check = true;
+            }
+            Properties.Settings.Default.Save();
         }
     }
 }
